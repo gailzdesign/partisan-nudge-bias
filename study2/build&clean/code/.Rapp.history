@@ -1,0 +1,498 @@
+library()
+head(CO2)
+2+2
+x <- c(1, 2, 3, 4, 5)#
+mean(x)         # This result will not display.
+print( sd(x) )  # This one will.
+attach(mydata100)
+library(ggplot2)
+load("/Users/Tannenbaum/Desktop/untitled.rdata")
+ls()
+attach(untitled)
+ls()
+names()
+names(untitled)
+detach(untitled)
+gplot(mydata100, aes(workshop) ) +   geom_bar()
+ggplot(mydata100, aes(info) ) +   geom_bar()
+ggplot(untitled, aes(info) ) +   geom_bar()
+ggplot(untitled, aes(uninfo) ) +   geom_bar()
+ggplot(untitled, aes(uninfor) ) +   geom_bar()
+ggplot(untitled, aes(info) ) +   geom_bar() + coord_flip()
+ggplot(untitled, aes(info) ) +   geom_bar(position="dodge")
+ggplot(untitled, aes(default, fill="info") ) +   geom_bar(position="dodge")
+ggplot(untitled, aes(setting, fill="info") ) +   geom_bar(position="dodge")
+ggplot(untitled, aes(setting, fill="info") ) + geom_bar(position="dodge") + stat_summary(fun.y="mean")
+ggplot(untitled, aes(setting, fill="info") ) + stat_summary(fun.y="mean", geom="bar")
+ggplot(untitled, aes(setting,info) ) + stat_summary(fun.y="mean", fill="grey50" geom="bar")
+ggplot(untitled, aes(setting,info) ) + stat_summary(fun.y="mean", fill="grey50", geom="bar")
+ggplot(untitled, aes(setting,info) ) + stat_summary(fun.y="mean", geom="bar")
+ggplot(untitled, aes(setting,fill="info") ) + stat_summary(fun.y="mean", geom="bar")
+ggplot(untitled, aes(setting,fill=info) ) + stat_summary(fun.y="mean", geom="bar")
+ggplot(untitled, aes(setting,info) ) + stat_summary(fun.y="mean", geom="bar")
+ggplot(untitled, aes(setting,fill="info") ) + stat_summary(fun.y="mean", geom="bar")
+ggplot(untitled, aes(setting,info) ) + stat_summary(fun.y="mean", geom="bar")
+ggplot(untitled, aes(setting,info) ) + stat_summary(fun.y="mean", geom="bar") + coord_cartesian(ylim = c(3,7))
+ggplot(untitled, aes(setting,info) ) + stat_summary(fun.y="mean", geom="bar") + coord_cartesian(ylim = c(3,5))
+ggplot(untitled, aes(setting,info) ) + stat_summary(fun.y="mean", geom="bar") + coord_cartesian(ylim = c(3,5)) + + facet_grid( default ~ . )
+ggplot(untitled, aes(setting,info) ) + stat_summary(fun.y="mean", geom="bar") + coord_cartesian(ylim = c(3,5)) + + facet_grid(.~default)
+ggplot(untitled, aes(setting,info) ) + stat_summary(fun.y="mean", geom="bar") + coord_cartesian(ylim = c(3,5)) + facet_grid(.~default)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar") + coord_cartesian(ylim = c(3,5)) + facet_grid(.~setting)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar") + coord_cartesian(ylim = c(3,6)) + facet_grid(.~setting)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar") + facet_grid(.~setting)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar") + coord_cartesian(ylim = c(3,6)) + facet_grid(.~setting)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar")+ facet_grid(.~setting)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar", fill="setting")+ facet_grid(.~setting)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar", fill="cut")+ facet_grid(.~setting)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar", fill="default")+ facet_grid(.~setting)
+default2 <- factor(default)
+default2 <- factor(untitled$default)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar", fill="default2")+ facet_grid(.~setting)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar", fill="untitled$default2")+ facet_grid(.~setting)
+ggplot(untitled, aes(default,info) ) + stat_summary(fun.y="mean", geom="bar")+ facet_grid(.~setting)
+load("/Users/Tannenbaum/Dropbox/Desktop items/untitled.rdata")
+install.packages("plyr")#
+library("plyr")
+library("plyr")
+load the Illinois survey data#
+load(file("http://www.stanford.edu/~messing/data/IL2010.Rda"))
+ddply(.data = IL2010, .variables= .(treat), .fun = summarise,#
+        mean = mean(x=netther, na.rm=T),#
+        se = sd(netther, na.rm=T)/sqrt(length(netther)) )
+install.packages("boot")#
+library("boot")
+sample.wtd.mean <- function(x, w, d) {#
+    return(weighted.mean(x = x[d], w = w[d], na.rm=T ))#
+}
+playdata <- runif(20, 1, 10)#
+playdata#
+d <- sample(20, replace = TRUE)#
+d#
+playdata[d]
+b <- boot( IL2010$netther, statistic = sample.wtd.mean, R=1000, w=IL2010$weight)#
+b#
+sd(b$t)
+library("ggplot2")#
+# Create nice party ID variable:#
+IL2010$pid[IL2010$pid==8] <- NA#
+IL2010$pidcut <- cut(IL2010$pid, c(-Inf, 1, 3, 4, 6, Inf) , #
+        c("Strong Democrat", "Democrat", "Independent", "Republican", "Strong Republican"))#
+# clean up treatment variable#
+IL2010$treat <- factor(IL2010$treat, labels = c("Dark", "Light", "Control" ))#
+# Use plyr::ddply to produce estimates based on PID#
+pid.therm <- ddply(.data = IL2010, .variables= .(pidcut), .fun = summarise,      #
+        mean = weighted.mean(x=netther, w=weight, na.rm=T),#
+        se = sd(boot(netther, sample.wtd.mean, R = 1000, w = weight)$t))#
+# plot it#
+ggplot(na.omit(pid.therm), aes(x = mean, xmin = mean-se, xmax = mean+se, y = factor(pidcut))) +#
+        geom_point() + geom_segment( aes(x = mean-se, xend = mean+se,#
+                        y = factor(pidcut), yend=factor(pidcut))) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25))+#
+        xlab("Mean thermometer rating") + ylab("Treatment") +#
+        opts(title = expression("Thermometer ratings for Jessie White by party"))
+trtbypid.therm <- ddply(.data = IL2010, .variables= .(treat, pidcut), .fun = summarise,      #
+        mean = weighted.mean(x=netther, w=weight, na.rm=T),#
+        se = sd(boot(netther, sample.wtd.mean, R = 1000, w = weight)$t))#
+ggplot(na.omit(trtbypid.therm), aes(x = mean, xmin = mean-se, xmax = mean+se, y = factor(treat))) + #
+        geom_point() + geom_segment( aes(x = mean-se, xend = mean+se, #
+                        y = factor(treat), yend=factor(treat))) +#
+        facet_wrap(~pidcut, ncol=1) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25))+ #
+        xlab("Mean thermometer rating") + ylab("Treatment") +#
+        opts(title = expression("Thermometer ratings for Jessie White by treatment condition and pid"))
+ilplot <- IL2010[-which(is.na(IL2010$pidcut)),]#
+ilplot$treat[ilplot$treat=="Control"] <- NA#
+ilplot$treat <- ilplot$treat[drop=T]#
+ilplot <- ilplot[-which(is.na(ilplot$treat)),]#
+ilplot$dscore[which(ilplot$dscore< -1)] <- NA#
+# Plot it#
+ggplot(ilplot, aes(x = dscore, y = netther, colour=treat)) +#
+        geom_point() + geom_smooth(method = "loess", size = 1.5) +#
+        facet_wrap(~pidcut, nrow=1) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25))+#
+        xlab("IAT d-score (- pro black, + anti-black)") + ylab("Thermometer rating") +#
+        opts(title = expression("Thermometer ratings for Jessie White by treatment condition and iat"))
+ls()
+library("plyr")
+library("plyr")#
+# load data#
+load("/Users/Tannenbaum/Dropbox/Desktop items/study1.rdata")
+library("plyr")#
+# load data#
+load("/Users/Tannenbaum/Dropbox/Desktop items/study1.rdata")#
+#
+# look at ddply:#
+ddply(.data = study1, .variables= .(default), .fun = summarise,#
+        mean = mean(x=info, na.rm=T),#
+        se = sd(info, na.rm=T)/sqrt(length(info)) )
+help(ddply)
+library("plyr")#
+# load data#
+load("/Users/Tannenbaum/Dropbox/Desktop items/study1.rdata")#
+default <- factor(default)
+library("plyr")#
+# load data#
+load("/Users/Tannenbaum/Dropbox/Desktop items/study1.rdata")
+default2 <- factor(default)
+default <- factor(study1$default)
+default <- factor(default$study1)
+library("plyr")#
+# load data#
+load("/Users/Tannenbaum/Dropbox/Desktop items/study1.rdata")
+rm(list = ls())#
+library("plyr")#
+# load data#
+load("/Users/Tannenbaum/Dropbox/Desktop items/study1.rdata")
+ddply(.data = study1, .variables= .(default), .fun = summarise,#
+        mean = mean(x=info, na.rm=T),#
+        se = sd(info, na.rm=T)/sqrt(length(info)) )
+load("/Users/Tannenbaum/Dropbox/Desktop items/study1.rdata")
+ls()
+study1 <- untitled
+ddply(.data = study1, .variables= .(default), .fun = summarise,#
+        mean = mean(x=info, na.rm=T),#
+        se = sd(info, na.rm=T)/sqrt(length(info)) )
+library("ggplot2")
+study1$default <- factor(study1$default, labels = c("noneroll", "autoenroll" ))
+setting.info <- ddply(.data = study1, .variables= .(setting), .fun = summarise,      #
+        mean = weighted.mean(x=info, na.rm=T),#
+        se = sd(info, na.rm=T)/sqrt(length(info)) )
+ggplot(na.omit(setting.info), aes(x = mean, xmin = mean-se, xmax = mean+se, y = factor(setting))) +#
+        geom_point() + geom_segment( aes(x = mean-se, xend = mean+se,#
+                        y = factor(setting), yend=factor(setting))) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25)))
+ggplot(na.omit(setting.info), aes(x = mean, xmin = mean-se, xmax = mean+se, y = factor(setting))) +#
+        geom_point() + geom_segment( aes(x = mean-se, xend = mean+se,#
+                        y = factor(setting), yend=factor(setting))) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25))
+plot1.study1 <- ddply(.data = study1, .variables= .(default, setting), .fun = summarise,      #
+        mean = mean(x=info, na.rm=T),#
+        se = sd(info, na.rm=T)/sqrt(length(info)) )
+ggplot(na.omit(plot1.study1), aes(x = mean, xmin = mean-se, xmax = mean+se, y = 						factor(default))) + geom_point() + geom_segment( aes(x = mean-se, xend = mean+se, #
+        y = factor(default), yend=factor(default))) +#
+        facet_wrap(~setting, ncol=1) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25))+ #
+        xlab("Informativeness") + ylab("Default"))
+ggplot(na.omit(plot1.study1), aes(x = mean, xmin = mean-se, xmax = mean+se, y = 						factor(default))) + geom_point() + geom_segment( aes(x = mean-se, xend = mean+se, #
+        y = factor(default), yend=factor(default))) +#
+        facet_wrap(~setting, ncol=1) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25))+ #
+        xlab("Informativeness") + ylab("Default")
+ggplot(na.omit(plot1.study1), aes(x = mean, xmin = mean-se, xmax = mean+se, y = 						factor(default))) + geom_point() + geom_segment( aes(x = mean-se, xend = mean+se, #
+        y = factor(default), yend=factor(default))) +#
+        facet_wrap(~setting, ncol=1) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25))+ #
+        xlab("Informativeness")
+ggplot(na.omit(plot1.study1), aes(x = mean, xmin = mean-se, xmax = mean+se, y = 						factor(default))) + geom_point() + geom_segment( aes(x = mean-se, xend = mean+se, #
+        y = factor(default), yend=factor(default))) +#
+        facet_wrap(~setting, ncol=1) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25))+ #
+        xlab("Informativeness") + ylab(" ")
+print(levels(setting))
+print(levels(study$setting))
+print(levels(setting$study1))
+x = factor(sample(letters[1:5],100, replace=TRUE)
+print(levelss))
+print(levels(x)))
+print(levels(x))
+x <- factor(sample(letters[1:5],100, replace=TRUE)
+)
+print(levels(x))
+x = factor(x,levels(x)[c(4,5,1:3)])
+print(levels(x))
+setting2 <- factor(study1$setting,levels(factor(study1$setting))c[4,2,3,1])
+setting2 <- factor(study1$setting,levels(study1$setting)c[4,2,3,1])
+setting2 <- factor(study1$setting,levels(factor(study1$setting))c[4,2,3,1])
+ggplot(na.omit(plot1.study1), aes(x = mean, xmin = mean-se, xmax = mean+se, y = 						factor(default))) + geom_point() + geom_segment( aes(x = mean-se, xend = mean+se, #
+        y = factor(default), yend=factor(default))) +#
+        facet_wrap(~setting, ncol=1) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25))+ #
+        xlab("Informativeness") + ylab(" ")
+plot1.study1 <- ddply(.data = study1, .variables= .(default, setting), .fun = summarise,      #
+        mean = mean(x=info, na.rm=T),#
+        se = sd(info, na.rm=T)/sqrt(length(info)) )
+ggplot(na.omit(plot1.study1), aes(x = mean, xmin = mean-se, xmax = mean+se, y = 						factor(default))) + geom_point() + geom_segment( aes(x = mean-se, xend = mean+se, #
+        y = factor(default), yend=factor(default))) +#
+        facet_wrap(~setting, ncol=1) +#
+        theme_bw() + opts(axis.title.x = theme_text(size = 12, vjust = .25))+ #
+        xlab("Informativeness") + ylab(" ")
+library(car)#
+data(US.pop)#
+attach(US.pop)#
+plot(year, population, type="l", col="blue")
+education <- factor(sample(1:4,1000, replace=TRUE),#
+                    labels=c("none", "school", "college", "beyond"))
+experience <- 30*runif(1000)
+intercept <- c(0.5,1,1.5,2)[education]
+summary(education)
+log.earnings <- intercept +#
+  2*experience - 0.05*experience*experience + rnorm(1000)#
+A <- data.frame(education, experience, e2=experience*experience, log.earnings)#
+summary(A)
+summary(lm(log.earnings ~ -1 + education + experience + e2, A))
+load("/Users/Tannenbaum/Google Drive/Stats stuff/crossed effects in R/test.rdata")
+ls()
+load("/Users/Tannenbaum/Google Drive/Stats stuff/crossed effects in R/test.rdata")
+library(lme4)#
+library(languageR)#
+priming = read.csv("test.csv", header = TRUE)
+fig2 = read.csv("plot.csv", header = TRUE)
+getwd()
+load("/Users/Tannenbaum/Desktop/plot.rdata")
+library(ggplot2)
+ls()
+summary(plot)
+summary(test)
+ggplot(dat, aes(x=choices$plot, y=judgments$plot)) +#
+    geom_point(shape=1) +    # Use hollow circles#
+    geom_smooth(method=lm,   # Add linear regression line#
+                se=FALSE)
+ggplot(plot, aes(x=choices$plot, y=judgments$plot)) +#
+    geom_point(shape=1) +    # Use hollow circles#
+    geom_smooth(method=lm,   # Add linear regression line#
+                se=FALSE)
+ggplot(plot, aes(x=choices, y=judgments)) +#
+    geom_point(shape=1) +    # Use hollow circles#
+    geom_smooth(method=lm,   # Add linear regression line#
+                se=FALSE)
+ggplot(plot, aes(x=choices, y=judgments)) +#
+    geom_point(shape=1) +    # Use hollow circles#
+    geom_smooth(method=lm,   # Add linear regression line#
+              )
+plot2 <- ggplot(plot, aes(x=choices, y=judgments)) +#
+    geom_point(shape=1) +    # Use hollow circles#
+    geom_smooth(method=lm,   # Add linear regression line#
+              )
+plot2
+plot1 + ylim(0,100) + xlim(0,100)
+plot1 <- 	ggplot(plot, aes(x=choices, y=judgments)) +#
+    		geom_point(shape=1) +    # Use hollow circles#
+    		geom_smooth(method=lm,   # Add linear regression line#
+       		se=FALSE)#
+#
+plot1 + ylim(0,100) + xlim(0,100)
+ls()
+library(ggplot2)#
+plot1 <- 	ggplot(plot, aes(x=choices, y=judgments)) +#
+    		geom_point(shape=1) +    # Use hollow circles#
+    		geom_smooth(method=lm,   # Add linear regression line#
+       		se=FALSE)#
+#
+plot1 + ylim(0,100) + xlim(0,100)
+library(ggplot2)#
+#
+plot1 <- 	ggplot(plot, aes(x=choices, y=judgments)) +#
+    		geom_point(shape=1) +    # Use hollow circles#
+    		geom_smooth(method=lm,   # Add linear regression line#
+       		se=FALSE)
+library(ggplot2)#
+#
+plot1 <- 	ggplot(plot, aes(x=choices, y=judgments))
+library(lme4)#
+library(languageR)#
+priming = read.csv("test.csv", header = TRUE)#
+#
+model1 = lmer(dv ~ support + (1|trial) + (1|id), data = test)#
+summary(model1)#
+model2 = lmer(dv ~ support*frame1 + (1|trial) + (1|id), data = test)#
+print(model2, corr = FALSE)#
+mcmc = pvals.fnc(model2, nsim = 10000)#
+mcmc$fixed
+load("/Users/Tannenbaum/Google Drive/Stats stuff/crossed effects in R/test.rdata")
+ls()
+simulate a fake data set#
+set.seed(39740)#
+n <- 25#
+x <- rexp(n)#
+z <- rexp(n)#
+y <- x + z + x*z + rnorm(n)
+ls()
+summary(x)
+summary(y)
+corr(x,y)
+library(compactr)#
+eplot(xlim = mm(x), ylim = mm(y))#
+points(x, y)
+simulate a fake data set#
+set.seed(39740)#
+n <- 25#
+x <- rexp(n)#
+z <- rexp(n)#
+y <- x + z + x*z + rnorm(n)#
+library(compactr)#
+eplot(xlim = mm(x), ylim = mm(y))#
+points(x, y)
+ls()
+m <- lm(y ~ x + z + x*z)
+beta.hat <- coef(m)
+cov <- vcov(m)
+z0 <- seq(min(z), max(z), length.out = 1000)
+dy.dx <- beta.hat["x"] + beta.hat["x:z"]*z0
+se.dy.dx <- sqrt(cov["x", "x"] + z0^2*cov["x:z", "x:z"] + 2*z0*cov["x", "x:z"])
+upr <- dy.dx + 1.64*se.dy.dx#
+lwr <- dy.dx - 1.64*se.dy.dx
+eplot(xlim = mm(z0), ylim = mm(c(upr, lwr)), #
+      xlab = expression(z),#
+      ylab = expression(frac(partialdiff*y, partialdiff*x)))#
+lines(z0, dy.dx, lwd = 3)#
+lines(z0, lwr, lty = 3)#
+lines(z0, upr, lty = 3)
+eplot(xlim = mm(z0), ylim = mm(c(upr, lwr)), #
+      xlab = expression(z),#
+      ylab = expression(frac(partialdiff*y, partialdiff*x)))#
+lines(z0, dy.dx, lwd = 3)
+eplot(xlim = mm(z0), ylim = mm(c(upr, lwr)), #
+      xlab = expression(z),#
+      ylab = expression(frac(partialdiff*y, partialdiff*x)))#
+lines(z0, dy.dx, lwd = 3)#
+lines(z0, lwr, lty = 3)
+eplot(xlim = mm(z0), ylim = mm(c(upr, lwr)), #
+      xlab = expression(z),#
+      ylab = expression(frac(partialdiff*y, partialdiff*x)))
+lines(z0, dy.dx, lwd = 3)
+lines(z0, upr, lty = 3)
+eplot(xlim = mm(z0), ylim = mm(c(upr, lwr)), #
+      xlab = expression(z),#
+      ylab = expression(frac(partialdiff*y, partialdiff*x)))#
+lines(z0, dy.dx, lwd = 3)#
+lines(z0, lwr, lty = 3)#
+lines(z0, upr, lty = 3)
+library(mediation)
+data(boundsdata)data(boundsdata)
+ls()
+library(mediation)
+data(boundsdata)
+data.SED <- subset(boundsdata, manip == 0)
+bound1 <- mediate.sed("out","med","ttt", data.SED, SI=FALSE)
+summary(bound1)
+bound2 <- mediate.sed("out","med","ttt", data.SED, SI=TRUE)
+summary(bound2)
+search()
+update.packages()
+search()
+update.packages()
+mydata <- read.csv("mydataID.csv", row.names = "id")
+2 + 3
+1:5-
+0
+1:50
+1:100
+x <- 2
+y <- 3
+x + y
+x*y
+x
+y
+gender <- c( "f","f","f",NA,"m","m","m","m" )
+gender
+workshop <- c( 1,2,1,2,1,2,1,2 )
+q1 <- c( 1,2,2,3,4,5,5,4  )
+q2 <- c( 1,1,2,1,5,4,3,5  )
+q3 <- c( 5,4,4,NA,2,5,4,5 )
+q4 <- c( 1,1,3,3,4,5,4,5  )
+table(workshop)
+tab gender
+table(gender)
+mean(q3, na.rm=TRUE)
+q1[5]
+q1
+q1[2]
+q1[5:8]
+q1[gender=="m"]
+mean(q1[gender=="m"], na.rm=TRUE)
+workshop
+gender
+gender[3]
+gender[workshop==2]
+workshop <- factor(workshop)
+workshop
+table(workshop)
+mean(workshop)
+gender[workshop == 2]
+workshop <- c(1,2,1,2,1,2,1,2)
+workshop <- factor(#
+     workshop,#
+     levels=c(1,2,3,4),#
+     labels=c("R","Stata","SPSS","SAS")#
+)
+workshop
+table(workshop)
+gender[workshop==2]
+gender[workshop=="Stata"]
+gender <- c( "f","f","f",NA,"m","m","m","m" )
+gender <- factor(gender)
+gender
+> gender <- factor(+ gender,+   levels=c("m","f"),+ labels=c("Male","Female") +)
+> gender <- factor(gender, levels=c("m","f"), labels=c("Male","Female"))
+gender <- factor(gender, levels=c("m","f"), labels=c("Male","Female"))
+gender
+table(gender)
+workshop[gender=="m"]
+workshop[gender=="Male"]
+ls()
+cor.test(q1,q2)
+cor.test(q1,q3)
+cor.test(q1,q4)
+cor.test(q1,q5)
+mydata <- data.frame(workshop,gender,q1,q2,q3,q4)
+ls()
+2+2
+sample(demo)
+data(demo)
+# Generate k random walks across time {0, 1, ... , T}#
+T <- 100#
+k <- 250#
+initial.value <- 10#
+GetRandomWalk <- function() {#
+  # Add a standard normal at each step#
+  initial.value + c(1, cumsum(rnorm(T)))#
+}#
+# Matrix of random walks#
+values <- replicate(k, GetRandomWalk())#
+# Create an empty plot#
+dev.new(height=6, width=10)#
+plot(0:T, rep(NA, T + 1), main=sprintf("%s Random Walks", k),#
+     xlab="time", ylab="value",#
+     ylim=10 + 4.5 * c(-1, 1) * sqrt(T))#
+mtext(sprintf("%s%s} with initial value of %s",#
+              "Across time {0, 1, ... , ", T, initial.value))#
+for (i in 1:k) {#
+  lines(0:T, values[ , i], lwd=0.25)#
+}#
+for (sign in c(-1, 1)) {#
+  curve(initial.value + sign * 1.96 * sqrt(x), from=0, to=T,#
+        n=2*T, col="darkred", lty=2, lwd=1.5, add=TRUE)#
+}#
+legend("topright", "1.96 * sqrt(t)",#
+       bty="n", lwd=1.5, lty=2, col="darkred")
+# Generate k random walks across time {0, 1, ... , T}#
+T <- 100#
+k <- 500#
+initial.value <- 10#
+GetRandomWalk <- function() {#
+  # Add a standard normal at each step#
+  initial.value + c(1, cumsum(rnorm(T)))#
+}#
+# Matrix of random walks#
+values <- replicate(k, GetRandomWalk())#
+# Create an empty plot#
+dev.new(height=6, width=10)#
+plot(0:T, rep(NA, T + 1), main=sprintf("%s Random Walks", k),#
+     xlab="time", ylab="value",#
+     ylim=10 + 4.5 * c(-1, 1) * sqrt(T))#
+mtext(sprintf("%s%s} with initial value of %s",#
+              "Across time {0, 1, ... , ", T, initial.value))#
+for (i in 1:k) {#
+  lines(0:T, values[ , i], lwd=0.25)#
+}#
+for (sign in c(-1, 1)) {#
+  curve(initial.value + sign * 1.96 * sqrt(x), from=0, to=T,#
+        n=2*T, col="darkred", lty=2, lwd=1.5, add=TRUE)#
+}#
+legend("topright", "1.96 * sqrt(t)",#
+       bty="n", lwd=1.5, lty=2, col="darkred")
+library(dplyr)
+ls()
+2 + 2
+source("/Users/Tannenbaum/Dropbox/Work/Partisan Nudge project/study 1/build&clean/code/Study1.R")
+setwd("/Users/Tannenbaum/Dropbox/Work/Partisan Nudge project/study 1/build&clean/code")
